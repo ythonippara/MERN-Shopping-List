@@ -2,28 +2,29 @@
 const express = require('express');
 // ORM to interact with MongoDB database
 const mongoose = require('mongoose');
-// Take data from POST requests
-const bodyParser = require('body-parser');
 const path = require('path');
-
-const items = require('./routes/api/items');
 
 // Initialize Express
 const app = express();
-// Body Parser Middleware
-app.use(bodyParser.json());
+// Body Parser Middleware; take data from POST requests
+app.use(express.json());
 
 // DB Config: get the value of mongoURI var from keys.js
 const db = require('./config/keys').mongoURI;
 
 // Connect to Mongo: promise base???
 mongoose
-  .connect(db)
+  .connect(db, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  }) // Adding new Mongo URL parser
   .then(() => console.log('MongoDB connected ...'))
   .catch(err => console.log(err));
 
 // Use Routes: anything that goes into /api/items should refer to items var
-app.use('/api/items', items);
+app.use('/api/items', require('./routes/api/items'));
+app.use('/api/users', require('./routes/api/users'));
 
 // Serve static assets if in production and not hitting api/items
 if (process.env.NODE_ENV === 'production') {
