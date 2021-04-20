@@ -1,0 +1,3 @@
+module.exports = {
+    mongoURI: 'mongodb+srv://dbuser:1234@cluster0.bukof.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+};
