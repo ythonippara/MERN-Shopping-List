@@ -3,6 +3,7 @@ const express = require('express');
 // ORM to interact with MongoDB database
 const mongoose = require('mongoose');
 const path = require('path');
+const config = require('config');
 
 // Initialize Express
 const app = express();
@@ -10,7 +11,7 @@ const app = express();
 app.use(express.json());
 
 // DB Config: get the value of mongoURI var from keys.js
-const db = require('./config/keys').mongoURI;
+const db = config.get('mongoURI');
 
 // Connect to Mongo: promise base???
 mongoose
@@ -25,6 +26,7 @@ mongoose
 // Use Routes: anything that goes into /api/items should refer to items var
 app.use('/api/items', require('./routes/api/items'));
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/auth', require('./routes/api/auth'));
 
 // Serve static assets if in production and not hitting api/items
 if (process.env.NODE_ENV === 'production') {
